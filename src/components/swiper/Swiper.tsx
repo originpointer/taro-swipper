@@ -121,8 +121,3 @@ const Swiper: FC<SwiperProps> = (props) => {
 }
 
 export default Swiper
-
-function useMounted(initialize: () => Promise<void>) {
-  throw new Error('Function not implemented.')
-}
-

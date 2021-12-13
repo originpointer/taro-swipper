@@ -1,21 +1,28 @@
 import { ViewProps } from '@tarojs/components/types/View'
 import { FC } from '@tarojs/taro'
 import { ITouchEvent, View } from '@tarojs/components'
-import { useCallback, useState } from 'react'
+import { CSSProperties, useCallback, useMemo, useState } from 'react'
 import { useUpdate } from '~/hooks'
 
 import { useTouch } from './utils/touch'
+import { SwiperDirection } from './swiper.shared'
+import { addUnitPx, unitToPx } from './utils/format/unit'
 
 export interface SwiperProps extends ViewProps {
   touchable?: boolean
+  direction?: SwiperDirection
 }
 
 const Swiper: FC<SwiperProps> = (props) => {
-  const { touchable = true, ...restProps } = props
+  const { touchable = true, direction, ...restProps } = props
+
+  const vertical = direction === 'vertical'
 
   const touch = useTouch()
 
   const update = useUpdate()
+
+  const [offset, setOffset] = useState(0)
 
   const [swiperTag, setSwiperTag] = useState(0)
 
@@ -34,6 +41,19 @@ const Swiper: FC<SwiperProps> = (props) => {
     console.log('sodalog onTouch cancel')
   }, [])
 
+  const trackStyle = useMemo(() => {
+    const style: CSSProperties = {
+      transitionDuration: `0ms`,
+      transform: `translate${vertical ? 'Y' : 'X'}(${addUnitPx(offset)})`
+
+    }
+    return style;
+  }, [offset, vertical])
+
+  console.log(`addUnitPx(offset)`, addUnitPx(offset))
+
+  console.log(`trackStyle`, trackStyle)
+
   return (
     <View {...restProps}>
       <View
@@ -41,7 +61,7 @@ const Swiper: FC<SwiperProps> = (props) => {
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchCancel={onTouchCancel}
-        style={{ height: '100%' }}
+        style={trackStyle}
       >
         hello world {swiperTag}
       </View>
@@ -50,3 +70,4 @@ const Swiper: FC<SwiperProps> = (props) => {
 }
 
 export default Swiper
+

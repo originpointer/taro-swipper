@@ -47,5 +47,6 @@ const getRect = (elementOrRef: any): Promise<Rect> => {
 }
 
 export {
-  getRect
+  getRect,
+  makeRect
 }

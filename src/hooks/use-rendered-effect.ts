@@ -19,3 +19,5 @@ const useRenderedEffect = (effect: EffectCallback, deps?: DependencyList) => {
     deps
   )
 }
+
+export default useRenderedEffect

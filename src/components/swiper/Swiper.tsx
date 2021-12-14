@@ -82,15 +82,19 @@ const Swiper: FC<SwiperProps> = (props) => {
       if (!touchable) {
         return
       }
+
+      touch.start(event);
+
     },
-    [touchable],
+    [touch, touchable],
   )
   const onTouchMove = useCallback((event: ITouchEvent) => {
     touch.move(event)
   }, [touch])
-  const onTouchCancel = useCallback(() => {
-    console.log('sodalog onTouch cancel')
-  }, [])
+  const onTouchEnd = useCallback(() => {
+    const duration = Date.now() - touch.touchStartTime
+    console.log(`duration`, duration)
+  }, [touch.touchStartTime])
 
   const trackStyle = useMemo(() => {
     const style: CSSProperties = {
@@ -111,8 +115,9 @@ const Swiper: FC<SwiperProps> = (props) => {
         catchMove
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
-        onTouchCancel={onTouchCancel}
-        style={trackStyle}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchEnd}
+        style={{ height: '100%' }}
       >
         hello world {swiperTag}
       </View>
